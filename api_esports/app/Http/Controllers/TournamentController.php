@@ -13,7 +13,19 @@ class TournamentController extends Controller
      */
     public function index()
     {
-        //
+        return Tournament::orderBy('game')->get();
+    }
+
+    public function getTeamsByTournamentId($tournamentId)
+    {
+        $tournament = Tournament::find($tournamentId);
+
+        if (!$tournament) {
+            return response()->json(['error' => 'Tournament not found'], 404);
+        }
+
+        $teams = $tournament->teams()->get();
+        return response()->json($teams);
     }
 
     /**
@@ -29,7 +41,14 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tournament = new Tournament();
+        $tournament->name = $request->name;
+        $tournament->game = $request->game;
+        $tournament->type = $request->type;
+        $tournament->start_date = $request->start_date;
+        $tournament->end_date = $request->end_date;
+        $tournament->save();
+        return $tournament;
     }
 
     /**
@@ -37,7 +56,7 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        //
+        return $tournament;
     }
 
     /**
@@ -53,7 +72,13 @@ class TournamentController extends Controller
      */
     public function update(Request $request, Tournament $tournament)
     {
-        //
+        $tournament->name = $request->name;
+        $tournament->game = $request->game;
+        $tournament->type = $request->type;
+        $tournament->start_date = $request->start_date;
+        $tournament->end_date = $request->end_date;
+        $tournament->save();
+        return $tournament;
     }
 
     /**
@@ -61,6 +86,6 @@ class TournamentController extends Controller
      */
     public function destroy(Tournament $tournament)
     {
-        //
+        return $tournament->delete();
     }
 }

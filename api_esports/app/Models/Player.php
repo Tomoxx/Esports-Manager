@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Player extends Model
 {
+    use HasFactory;
     protected $table = 'players';
 
-    //equipo del player
-    use HasFactory;
-    public function equipo(): BelongsTo
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

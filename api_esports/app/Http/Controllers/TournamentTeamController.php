@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TournamentTeam;
 use App\Http\Controllers\Controller;
+use App\Models\Tournament;
 use Illuminate\Http\Request;
 
 class TournamentTeamController extends Controller
@@ -13,7 +14,15 @@ class TournamentTeamController extends Controller
      */
     public function index()
     {
-        //
+        return TournamentTeam::all();
+    }
+
+    public function getTeams($tournament_id)
+    {
+        $teams = TournamentTeam::where('tournament_id', $tournament_id)
+            ->with('team') // Assuming you have a relationship defined in TournamentTeam model to get team details
+            ->get();
+        return response()->json($teams);
     }
 
     /**
@@ -37,7 +46,7 @@ class TournamentTeamController extends Controller
      */
     public function show(TournamentTeam $tournamentTeam)
     {
-        //
+        return $tournamentTeam;
     }
 
     /**

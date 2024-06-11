@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::resource('/teams', TeamController::class);
+Route::get('/teams/{id}/players', [TeamController::class, 'getPlayers']);
 Route::resource('/players', PlayerController::class);
 Route::resource('/matches', GameMatchController::class);
 Route::resource('/tournaments', TournamentController::class);
+Route::get('/tournaments/{id}/teams', [TournamentTeamController::class, 'getTeams']);
 Route::resource('/tournament_teams', TournamentTeamController::class);
 Route::resource('/venues', VenueController::class);

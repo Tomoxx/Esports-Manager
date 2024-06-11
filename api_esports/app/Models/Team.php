@@ -19,6 +19,11 @@ class Team extends Model
         return $this->hasMany(Player::class);
     }
 
+    public function tournaments(): HasMany
+    {
+        return $this->hasMany(TournamentTeam::class);
+    }
+
     //asignar valor a cantidad
     public function getCantidadAttribute()
     {
