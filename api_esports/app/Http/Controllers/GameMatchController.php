@@ -13,7 +13,7 @@ class GameMatchController extends Controller
      */
     public function index()
     {
-        //
+        return GameMatch::all();
     }
 
     /**
@@ -29,7 +29,16 @@ class GameMatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $gameMatch = new GameMatch();
+        $gameMatch->tournament_id = $request->tournament_id;
+        $gameMatch->home_team_id = $request->home_team_id;
+        $gameMatch->away_team_id = $request->away_team_id;
+        $gameMatch->venue_id = $request->venue_id;
+        $gameMatch->match_date = $request->match_date;
+        $gameMatch->home_team_score = $request->home_team_score;
+        $gameMatch->away_team_score = $request->away_team_score;
+        $gameMatch->save();
+        return $gameMatch;
     }
 
     /**
@@ -37,7 +46,7 @@ class GameMatchController extends Controller
      */
     public function show(GameMatch $gameMatch)
     {
-        //
+        return $gameMatch;
     }
 
     /**
@@ -53,7 +62,15 @@ class GameMatchController extends Controller
      */
     public function update(Request $request, GameMatch $gameMatch)
     {
-        //
+        $gameMatch->tournament_id = $request->tournament_id;
+        $gameMatch->home_team_id = $request->home_team_id;
+        $gameMatch->away_team_id = $request->away_team_id;
+        $gameMatch->venue_id = $request->venue_id;
+        $gameMatch->match_date = $request->match_date;
+        $gameMatch->home_team_score = $request->home_team_score;
+        $gameMatch->away_team_score = $request->away_team_score;
+        $gameMatch->save();
+        return $gameMatch;
     }
 
     /**
@@ -61,6 +78,6 @@ class GameMatchController extends Controller
      */
     public function destroy(GameMatch $gameMatch)
     {
-        //
+        return $gameMatch->delete();
     }
 }

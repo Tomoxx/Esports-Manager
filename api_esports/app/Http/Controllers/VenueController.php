@@ -13,7 +13,7 @@ class VenueController extends Controller
      */
     public function index()
     {
-        //
+        return Venue::all();
     }
 
     /**
@@ -29,7 +29,11 @@ class VenueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $venue = new Venue();
+        $venue->name = $request->name;
+        $venue->city = $request->city;
+        $venue->save();
+        return $venue;
     }
 
     /**
@@ -37,7 +41,7 @@ class VenueController extends Controller
      */
     public function show(Venue $venue)
     {
-        //
+        return $venue;
     }
 
     /**
@@ -53,7 +57,10 @@ class VenueController extends Controller
      */
     public function update(Request $request, Venue $venue)
     {
-        //
+        $venue->name = $request->name;
+        $venue->city = $request->city;
+        $venue->save();
+        return $venue;
     }
 
     /**
@@ -61,6 +68,6 @@ class VenueController extends Controller
      */
     public function destroy(Venue $venue)
     {
-        //
+        return $venue->delete();
     }
 }

@@ -29,7 +29,11 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $player = new Player();
+        $player->name = $request->name;
+        $player->team_id = $request->team_id;
+        $player->save();
+        return $player;
     }
 
     /**
@@ -37,7 +41,7 @@ class PlayerController extends Controller
      */
     public function show(Player $player)
     {
-        //
+        return $player;
     }
 
     /**
@@ -53,7 +57,9 @@ class PlayerController extends Controller
      */
     public function update(Request $request, Player $player)
     {
-        //
+        $player->name = $request->name;
+        $player->save();
+        return $player;
     }
 
     /**
@@ -61,6 +67,6 @@ class PlayerController extends Controller
      */
     public function destroy(Player $player)
     {
-        //
+        return $player->delete();
     }
 }

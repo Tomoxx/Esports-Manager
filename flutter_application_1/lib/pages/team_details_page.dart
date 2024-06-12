@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/create_player_page.dart';
 import 'package:flutter_application_1/pages/edit_team_page.dart';
 import 'package:flutter_application_1/services/http_service.dart';
 
-class TeamDetailsScreen extends StatelessWidget {
+class TeamDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> team;
 
   TeamDetailsScreen({required this.team});
+
+  @override
+  _TeamDetailsScreenState createState() => _TeamDetailsScreenState();
+}
+
+class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
+  late Future<List<dynamic>> _players;
+
+  @override
+  void initState() {
+    super.initState();
+    _players = HttpService().getPlayersByTeamId(widget.team['id']);
+  }
+
+  void _refreshPlayers() {
+    setState(() {
+      _players = HttpService().getPlayersByTeamId(widget.team['id']);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +39,21 @@ class TeamDetailsScreen extends StatelessWidget {
               var updatedTeam = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditTeamScreen(team: team),
+                  builder: (context) => EditTeamScreen(team: widget.team),
                 ),
               );
 
               if (updatedTeam != null) {
-                // Update the team details screen with the new data
-                team['name'] = updatedTeam['name'];
+                setState(() {
+                  widget.team['name'] = updatedTeam['name'];
+                });
               }
             },
           ),
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () async {
-              bool deleted = await HttpService().deleteTeam(team['id']);
+              bool deleted = await HttpService().deleteTeam(widget.team['id']);
               if (deleted) {
                 Navigator.of(context)
                     .pop(); // Go back to the previous screen after deleting
@@ -53,13 +74,13 @@ class TeamDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID: ${team['id']}'),
-            Text('Name: ${team['name']}'),
+            Text('ID: ${widget.team['id']}'),
+            Text('Name: ${widget.team['name']}'),
             SizedBox(height: 20),
             Text('Players:', style: TextStyle(fontWeight: FontWeight.bold)),
             Expanded(
               child: FutureBuilder<List<dynamic>>(
-                future: HttpService().getPlayersByTeamId(team['id']),
+                future: _players,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -75,12 +96,49 @@ class TeamDetailsScreen extends StatelessWidget {
                         return ListTile(
                           title: Text(player['name']),
                           subtitle: Text('ID: ${player['id']}'),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () async {
+                              bool deleted = await HttpService()
+                                  .deletePlayer(player['id']);
+                              if (deleted) {
+                                setState(() {
+                                  snapshot.data!.removeAt(index);
+                                });
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Player deleted successfully'),
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Failed to delete player'),
+                                ));
+                              }
+                            },
+                          ),
                         );
                       },
                     );
                   }
                 },
               ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var newPlayer = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AddPlayerScreen(teamId: widget.team['id']),
+                  ),
+                );
+
+                if (newPlayer != null) {
+                  _refreshPlayers();
+                }
+              },
+              child: Text('Add Player'),
             ),
           ],
         ),

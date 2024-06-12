@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/create_team_page.dart';
 import 'package:flutter_application_1/pages/team_details_page.dart';
 import 'package:flutter_application_1/services/http_service.dart';
 
@@ -16,11 +17,34 @@ class _TeamsScreenState extends State<TeamsScreen> {
     _teams = HttpService().listData('teams');
   }
 
+  void _loadTeams() {
+    setState(() {
+      _teams = HttpService().listData('teams');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Teams'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () async {
+              var newTournament = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateTeamScreen(),
+                ),
+              );
+
+              if (newTournament != null) {
+                _loadTeams();
+              }
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<dynamic>>(
         future: _teams,
