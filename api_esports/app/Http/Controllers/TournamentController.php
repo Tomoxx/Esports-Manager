@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Tournament;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\TournamentRequest;
 
 class TournamentController extends Controller
 {
@@ -14,19 +13,7 @@ class TournamentController extends Controller
      */
     public function index()
     {
-        return Tournament::orderBy('game')->get();
-    }
-
-    public function getTeamsByTournamentId($tournamentId)
-    {
-        $tournament = Tournament::find($tournamentId);
-
-        if (!$tournament) {
-            return response()->json(['error' => 'Tournament not found'], 404);
-        }
-
-        $teams = $tournament->teams()->get();
-        return response()->json($teams);
+        //
     }
 
     /**
@@ -40,16 +27,9 @@ class TournamentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TournamentRequest $request)
+    public function store(Request $request)
     {
-        $tournament = new Tournament();
-        $tournament->name = $request->name;
-        $tournament->game = $request->game;
-        $tournament->type = $request->type;
-        $tournament->start_date = $request->start_date;
-        $tournament->end_date = $request->end_date;
-        $tournament->save();
-        return $tournament;
+        //
     }
 
     /**
@@ -57,7 +37,7 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        return $tournament;
+        //
     }
 
     /**
@@ -71,15 +51,9 @@ class TournamentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TournamentRequest $request, Tournament $tournament)
+    public function update(Request $request, Tournament $tournament)
     {
-        $tournament->name = $request->name;
-        $tournament->game = $request->game;
-        $tournament->type = $request->type;
-        $tournament->start_date = $request->start_date;
-        $tournament->end_date = $request->end_date;
-        $tournament->save();
-        return $tournament;
+        //
     }
 
     /**
@@ -87,6 +61,6 @@ class TournamentController extends Controller
      */
     public function destroy(Tournament $tournament)
     {
-        return $tournament->delete();
+        //
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\GameMatch;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\GameMatchRequest;
 
 class GameMatchController extends Controller
 {
@@ -14,15 +13,7 @@ class GameMatchController extends Controller
      */
     public function index()
     {
-        return GameMatch::all();
-    }
-
-    public function getMatches($tournament_id)
-    {
-        $matches = GameMatch::where('tournament_id', $tournament_id)
-            ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
-            ->get();
-        return response()->json($matches);
+        //
     }
 
     /**
@@ -36,29 +27,17 @@ class GameMatchController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(GameMatchRequest $request)
+    public function store(Request $request)
     {
-        $gameMatch = new GameMatch();
-        $gameMatch->tournament_id = $request->tournament_id;
-        $gameMatch->home_team_id = $request->home_team_id;
-        $gameMatch->away_team_id = $request->away_team_id;
-        $gameMatch->venue_id = $request->venue_id;
-        $gameMatch->match_date = $request->match_date;
-        $gameMatch->home_team_score = $request->home_team_score;
-        $gameMatch->away_team_score = $request->away_team_score;
-        $gameMatch->save();
-        return $gameMatch;
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($gameMatch_id)
+    public function show(GameMatch $gameMatch)
     {
-        $gameMatch = GameMatch::where('id', $gameMatch_id)
-            ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
-            ->get();
-        return response()->json($gameMatch);
+        //
     }
 
     /**
@@ -72,38 +51,16 @@ class GameMatchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(GameMatchRequest $request, $id)
+    public function update(Request $request, GameMatch $gameMatch)
     {
-        // Find the match by ID
-        $gameMatch = GameMatch::find($id);
-
-        // Check if the match exists
-        if (!$gameMatch) {
-            return response()->json(['message' => 'Match not found'], 404);
-        }
-
-        // Update the match scores and date
-        $gameMatch->home_team_score = $request['home_team_score'];
-        $gameMatch->away_team_score = $request['away_team_score'];
-        $gameMatch->match_date = $request['match_date'];
-        $gameMatch->save();
-
-        return response()->json($gameMatch, 200);
+        //
     }
 
-    public function destroy($gameMatch_id)
-    {
-        $gameMatch = GameMatch::find($gameMatch_id);
-        if (!$gameMatch) {
-            return response()->json(['message' => 'Match not found'], 404);
-        }
-        return $gameMatch->delete();
-    }
     /**
      * Remove the specified resource from storage.
      */
-    // public function destroy(GameMatch $gameMatch)
-    // {
-    //     return $gameMatch->delete();
-    // }
+    public function destroy(GameMatch $gameMatch)
+    {
+        //
+    }
 }

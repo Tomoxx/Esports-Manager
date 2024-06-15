@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/teams_page.dart';
-import 'package:flutter_application_1/pages/tournaments_page.dart';
-import 'package:flutter_application_1/pages/venues_page.dart';
+import 'package:flutter_application_1/pages/campeonatos_page.dart';
+import 'package:flutter_application_1/pages/equipos_jugadores_page.dart';
+import 'package:flutter_application_1/pages/calendario_partidos_page.dart';
 import 'package:flutter_application_1/widgets/card_item.dart';
 
 void main() {
@@ -40,36 +40,46 @@ class HomePage extends StatelessWidget {
               child: ListView(
                 children: [
                   CardItem(
-                    title: 'Tournaments',
-                    icon: Icons.sports_esports,
+                    title: 'Campeonatos',
+                    imagePath: 'assets/images/campeonato.png', 
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => TournamentsScreen()),
+                        MaterialPageRoute(builder: (context) => const CampeonatoPage()),
                       );
                     },
                   ),
                   CardItem(
-                    title: 'Teams',
-                    icon: Icons.group,
+                    title: 'Equipos y Jugadores',
+                    imagePath: 'assets/images/equipo.jpg', 
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TeamsScreen()),
+                        MaterialPageRoute(builder: (context) => const EquiposJugadoresPage()),
                       );
                     },
                   ),
                   CardItem(
-                    title: 'Venues',
-                    icon: Icons.location_on,
+                    title: 'Calendario',
+                    imagePath: 'assets/images/calendario.jpg', 
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => VenuesScreen()),
+                        MaterialPageRoute(builder: (context) => const CalendarioPartidosPage()),
                       );
                     },
                   ),
+                  CardItem(
+                    title: 'Partidos',
+                    imagePath: 'assets/images/partido.png', 
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CalendarioPartidosPage()),
+                      );
+                    },
+                  ),
+               
                 ],
               ),
             ),
@@ -80,6 +90,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
+
+
 class DecoratedContainer extends StatelessWidget {
   const DecoratedContainer({Key? key}) : super(key: key);
 
@@ -87,7 +100,7 @@ class DecoratedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16), 
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -129,3 +142,9 @@ class DecoratedContainer extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\TeamRequest;
 
 class TeamController extends Controller
 {
@@ -14,21 +13,9 @@ class TeamController extends Controller
      */
     public function index()
     {
-        // return Team::all();
-        return Team::orderBy('game')->get()->makeHidden('players');
+        return Team::all();
     }
 
-    public function getPlayers($teamId)
-    {
-        $team = Team::find($teamId);
-
-        if (!$team) {
-            return response()->json(['error' => 'Team not found'], 404);
-        }
-
-        $players = $team->players()->get();
-        return response()->json($players);
-    }
     /**
      * Show the form for creating a new resource.
      */
@@ -40,12 +27,10 @@ class TeamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TeamRequest $request)
+    public function store(Request $request)
     {
         $team = new Team();
         $team->name = $request->name;
-        $team->game = $request->game;
-        $team->region = $request->region;
         $team->save();
         return $team;
     }
@@ -55,9 +40,7 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        // Hide the 'players' relationship
-        $team->makeHidden('players');
-        return $team;
+        //
     }
 
     /**
@@ -71,13 +54,9 @@ class TeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TeamRequest $request, Team $team)
+    public function update(Request $request, Team $team)
     {
-        $team->name = $request->name;
-        $team->game = $request->game;
-        $team->region = $request->region;
-        $team->save();
-        return $team;
+        //
     }
 
     /**
@@ -85,6 +64,6 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        return $team->delete();
+        //
     }
 }

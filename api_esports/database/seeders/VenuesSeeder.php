@@ -15,8 +15,6 @@ class VenuesSeeder extends Seeder
     {
         DB::table('venues')->insert([
             ['name' => 'Copper Box Arena', 'city' => 'London'],
-            ['name' => 'Valo Arena', 'city' => 'Shangai'],
-            ['name' => 'Mercedez-Benz Arena', 'city' => 'Shangai'],
         ]);
     }
 }
