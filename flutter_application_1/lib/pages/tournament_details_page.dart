@@ -94,11 +94,9 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('ID: ${widget.tournament['id']}',
+                    Text('Name: ${widget.tournament['name']}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
-                    Text('Name: ${widget.tournament['name']}',
-                        style: TextStyle(fontSize: 16)),
                     Text('Game: ${widget.tournament['game']}',
                         style: TextStyle(fontSize: 16)),
                     Text('Type: ${widget.tournament['type']}',

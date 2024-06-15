@@ -46,6 +46,8 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
               if (updatedTeam != null) {
                 setState(() {
                   widget.team['name'] = updatedTeam['name'];
+                  widget.team['game'] = updatedTeam['game'];
+                  widget.team['region'] = updatedTeam['region'];
                 });
               }
             },
@@ -84,12 +86,9 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('ID: ${widget.team['id']}',
+                    Text('Name: ${widget.team['name']}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
-                    Text('Name: ${widget.team['name']}',
-                        style: TextStyle(fontSize: 16)),
                     SizedBox(height: 10),
                     Text('Game: ${widget.team['game']}',
                         style: TextStyle(fontSize: 16)),

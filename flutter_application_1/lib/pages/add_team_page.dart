@@ -18,7 +18,7 @@ class _AddTeamPageState extends State<AddTeamPage> {
   @override
   void initState() {
     super.initState();
-    _teams = HttpService().listTeamsPerGame('teams', widget.game);
+    _teams = HttpService().listTeamsPerGame(widget.game);
   }
 
   @override

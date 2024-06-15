@@ -24,6 +24,7 @@ class GameMatch extends Model
     {
         return \Carbon\Carbon::parse($value)->format('Y-m-d H:i');
     }
+
     public function tournament(): BelongsTo
     {
         return $this->belongsTo(Tournament::class);

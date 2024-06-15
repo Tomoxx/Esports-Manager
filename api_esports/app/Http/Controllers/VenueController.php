@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Venue;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\VenueRequest;
 
 class VenueController extends Controller
 {
@@ -27,7 +28,7 @@ class VenueController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VenueRequest $request)
     {
         $venue = new Venue();
         $venue->name = $request->name;
@@ -55,7 +56,7 @@ class VenueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Venue $venue)
+    public function update(VenueRequest $request, Venue $venue)
     {
         $venue->name = $request->name;
         $venue->city = $request->city;

@@ -160,6 +160,7 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
                       _startDateController.text,
                       _endDateController.text,
                     );
+                    print(updatedTournament);
                     if (updatedTournament != null) {
                       Navigator.of(context).pop(updatedTournament);
                     } else {

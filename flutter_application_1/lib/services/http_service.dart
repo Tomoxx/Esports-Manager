@@ -14,8 +14,8 @@ class HttpService {
     return [];
   }
 
-  Future<List<dynamic>> listTeamsPerGame(String collection, String game) async {
-    var response = await http.get(Uri.parse(apiUrl + '/' + collection));
+  Future<List<dynamic>> listTeamsPerGame(String game) async {
+    var response = await http.get(Uri.parse(apiUrl + '/' + 'teams'));
 
     if (response.statusCode == 200) {
       List<dynamic> teams = json.decode(response.body);

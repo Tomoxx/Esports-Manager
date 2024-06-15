@@ -52,6 +52,26 @@ class _TournamentCalendarScreenState extends State<TournamentCalendarScreen> {
     _fetchMatches();
   }
 
+  // Function to remove a match by ID
+  void _removeMatch(int matchId) async {
+    try {
+      // Call your HTTP service method to remove the match by ID
+      await HttpService2().deleteMatch(matchId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Match removed successfully'),
+        ),
+      );
+      _refreshMatches(); // Refresh the matches list after removal
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to remove match: $e'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,33 +148,50 @@ class _TournamentCalendarScreenState extends State<TournamentCalendarScreen> {
           winner = 'Draw';
         }
 
-        return ListTile(
-          title: Text(
-              '${match['home_team']['name']} vs ${match['away_team']['name']}'),
-          subtitle: Text('Venue: $venueName - Date: ${match['match_date']}'),
-          trailing: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('${match['home_team_score']} - ${match['away_team_score']}'),
-              Text(winner, style: TextStyle(color: Colors.green)),
-            ],
-          ),
-          onTap: () async {
-            var result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditMatchScreen(
-                  matchId: match['id'],
-                  homeTeamScore: match['home_team_score'],
-                  awayTeamScore: match['away_team_score'],
-                  matchDate: match['match_date'],
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: ListTile(
+            title: Text(
+                '${match['home_team']['name']} vs ${match['away_team']['name']}'),
+            subtitle: Text('Venue: $venueName - Date: ${match['match_date']}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 8.0), // Space between icon and scoreboard
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                        '${match['home_team_score']} - ${match['away_team_score']}'),
+                    Text(winner, style: TextStyle(color: Colors.green)),
+                  ],
                 ),
-              ),
-            );
-            if (result != null && result == true) {
-              _refreshMatches();
-            }
-          },
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    _removeMatch(match['id']);
+                  },
+                ),
+              ],
+            ),
+            onTap: () async {
+              var result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditMatchScreen(
+                    matchId: match['id'],
+                    homeTeamScore: match['home_team_score'],
+                    awayTeamScore: match['away_team_score'],
+                    matchDate: match['match_date'],
+                  ),
+                ),
+              );
+              if (result != null && result == true) {
+                _refreshMatches();
+              }
+            },
+          ),
         );
       },
     );

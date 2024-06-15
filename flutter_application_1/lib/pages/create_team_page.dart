@@ -54,7 +54,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
               ),
               TextFormField(
                 controller: _regionController,
-                decoration: InputDecoration(labelText: 'region'),
+                decoration: InputDecoration(labelText: 'Region'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the region';

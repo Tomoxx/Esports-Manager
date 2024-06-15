@@ -46,6 +46,11 @@ class HttpService2 {
     return response.statusCode == 201;
   }
 
+  Future<bool> deleteMatch(int matchId) async {
+    var response = await http.delete(Uri.parse('$apiUrl/matches/$matchId'));
+    return response.statusCode == 200;
+  }
+
   Future<bool> updateMatch(int matchId, int homeTeamScore, int awayTeamScore,
       String matchDate) async {
     var url = Uri.parse('$apiUrl/matches/$matchId');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GameMatch;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\GameMatchRequest;
 
 class GameMatchController extends Controller
 {
@@ -71,17 +72,6 @@ class GameMatchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $gameMatch_id)
-    // {
-    //     $gameMatch = GameMatch::where('id', $gameMatch_id)
-    //         ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
-    //         ->get();;
-    //     $gameMatch->home_team_score = $request->home_team_score;
-    //     $gameMatch->away_team_score = $request->away_team_score;
-    //     $gameMatch->save();
-    //     return response()->json($gameMatch);
-    // }
-
     public function update(Request $request, $id)
     {
         // Validate the request data
@@ -108,11 +98,19 @@ class GameMatchController extends Controller
         return response()->json($gameMatch, 200);
     }
 
+    public function destroy($gameMatch_id)
+    {
+        $gameMatch = GameMatch::find($gameMatch_id);
+        if (!$gameMatch) {
+            return response()->json(['message' => 'Match not found'], 404);
+        }
+        return $gameMatch->delete();
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(GameMatch $gameMatch)
-    {
-        return $gameMatch->delete();
-    }
+    // public function destroy(GameMatch $gameMatch)
+    // {
+    //     return $gameMatch->delete();
+    // }
 }
