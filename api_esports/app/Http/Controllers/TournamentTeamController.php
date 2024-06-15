@@ -13,8 +13,28 @@ class TournamentTeamController extends Controller
      */
     public function index()
     {
-        //
+        return TournamentTeam::all();
     }
+
+    public function getTeams($tournament_id)
+    {
+        $teams = TournamentTeam::where('tournament_id', $tournament_id)
+            ->with('team')
+            ->get()
+            ->map(function ($tournamentTeam) {
+                return [
+                    'id' => $tournamentTeam->team->id,
+                    'tournament_team_id' => $tournamentTeam->id,
+                    'name' => $tournamentTeam->team->name,
+                    'game' => $tournamentTeam->team->game,
+                    'region' => $tournamentTeam->team->region,
+                    'placement' => $tournamentTeam->placement,
+                ];
+            });
+
+        return response()->json($teams);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -29,7 +49,12 @@ class TournamentTeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tournamentTeam = new TournamentTeam();
+        $tournamentTeam->tournament_id = $request->tournament_id;
+        $tournamentTeam->team_id = $request->team_id;
+        $tournamentTeam->placement = $request->placement;
+        $tournamentTeam->save();
+        return $tournamentTeam;
     }
 
     /**
@@ -37,7 +62,7 @@ class TournamentTeamController extends Controller
      */
     public function show(TournamentTeam $tournamentTeam)
     {
-        //
+        return $tournamentTeam;
     }
 
     /**
@@ -53,7 +78,9 @@ class TournamentTeamController extends Controller
      */
     public function update(Request $request, TournamentTeam $tournamentTeam)
     {
-        //
+        $tournamentTeam->placement = $request->placement;
+        $tournamentTeam->save();
+        return $tournamentTeam;
     }
 
     /**
@@ -61,6 +88,6 @@ class TournamentTeamController extends Controller
      */
     public function destroy(TournamentTeam $tournamentTeam)
     {
-        //
+        return $tournamentTeam->delete();
     }
 }
