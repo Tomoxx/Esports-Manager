@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import intl package for date formatting
 import 'package:flutter_application_1/services/http_service.dart';
 
 class EditTournamentScreen extends StatefulWidget {
@@ -18,6 +19,9 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
   late TextEditingController _startDateController;
   late TextEditingController _endDateController;
 
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +32,11 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
         TextEditingController(text: widget.tournament['start_date']);
     _endDateController =
         TextEditingController(text: widget.tournament['end_date']);
+
+    // Parse initial dates from text to DateTime objects
+    _startDate =
+        DateFormat('yyyy-MM-dd').parse(widget.tournament['start_date']);
+    _endDate = DateFormat('yyyy-MM-dd').parse(widget.tournament['end_date']);
   }
 
   @override
@@ -38,6 +47,38 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
     _startDateController.dispose();
     _endDateController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (picked != null && picked != _startDate) {
+      setState(() {
+        _startDate = picked;
+        _startDateController.text =
+            DateFormat('yyyy-MM-dd').format(picked); // Format date as string
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _endDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (picked != null && picked != _endDate) {
+      setState(() {
+        _endDate = picked;
+        _endDateController.text =
+            DateFormat('yyyy-MM-dd').format(picked); // Format date as string
+      });
+    }
   }
 
   @override
@@ -74,7 +115,7 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
               ),
               TextFormField(
                 controller: _typeController,
-                decoration: InputDecoration(labelText: 'Type'),
+                decoration: InputDecoration(labelText: 'Type (Online/Offline)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the type';
@@ -85,6 +126,8 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
               TextFormField(
                 controller: _startDateController,
                 decoration: InputDecoration(labelText: 'Start Date'),
+                onTap: () => _selectStartDate(context),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the start date';
@@ -95,6 +138,8 @@ class _EditTournamentScreenState extends State<EditTournamentScreen> {
               TextFormField(
                 controller: _endDateController,
                 decoration: InputDecoration(labelText: 'End Date'),
+                onTap: () => _selectEndDate(context),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the end date';

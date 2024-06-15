@@ -14,6 +14,17 @@ class HttpService {
     return [];
   }
 
+  Future<List<dynamic>> listTeamsPerGame(String collection, String game) async {
+    var response = await http.get(Uri.parse(apiUrl + '/' + collection));
+
+    if (response.statusCode == 200) {
+      List<dynamic> teams = json.decode(response.body);
+      teams = teams.where((team) => team['game'] == game).toList();
+      return teams;
+    }
+    return [];
+  }
+
   Future<LinkedHashMap<String, dynamic>> addTournament(String name, String game,
       String type, String startDate, String endDate) async {
     var url = Uri.parse('$apiUrl/tournaments');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/teams_page.dart';
 import 'package:flutter_application_1/pages/tournaments_page.dart';
+import 'package:flutter_application_1/pages/venues_page.dart';
 import 'package:flutter_application_1/widgets/card_item.dart';
 
 void main() {
@@ -39,8 +40,8 @@ class HomePage extends StatelessWidget {
               child: ListView(
                 children: [
                   CardItem(
-                    title: 'Campeonatos',
-                    imagePath: 'assets/images/campeonato.png',
+                    title: 'Tournaments',
+                    icon: Icons.sports_esports,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -50,12 +51,22 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   CardItem(
-                    title: 'Equipos y Jugadores',
-                    imagePath: 'assets/images/equipo.jpg',
+                    title: 'Teams',
+                    icon: Icons.group,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => TeamsScreen()),
+                      );
+                    },
+                  ),
+                  CardItem(
+                    title: 'Venues',
+                    icon: Icons.location_on,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VenuesScreen()),
                       );
                     },
                   ),

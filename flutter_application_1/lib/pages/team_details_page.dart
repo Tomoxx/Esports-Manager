@@ -74,10 +74,35 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID: ${widget.team['id']}'),
-            Text('Name: ${widget.team['name']}'),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ID: ${widget.team['id']}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 10),
+                    Text('Name: ${widget.team['name']}',
+                        style: TextStyle(fontSize: 16)),
+                    SizedBox(height: 10),
+                    Text('Game: ${widget.team['game']}',
+                        style: TextStyle(fontSize: 16)),
+                    SizedBox(height: 10),
+                    Text('Region: ${widget.team['region']}',
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(height: 20),
-            Text('Players:', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('Players:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Expanded(
               child: FutureBuilder<List<dynamic>>(
                 future: _players,
@@ -93,28 +118,40 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         var player = snapshot.data![index];
-                        return ListTile(
-                          title: Text(player['name']),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () async {
-                              bool deleted = await HttpService()
-                                  .deletePlayer(player['id']);
-                              if (deleted) {
-                                setState(() {
-                                  snapshot.data!.removeAt(index);
-                                });
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text('Player deleted successfully'),
-                                ));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text('Failed to delete player'),
-                                ));
-                              }
-                            },
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            elevation: 5,
+                            child: ListTile(
+                              title: Text(player['name'],
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  bool deleted = await HttpService()
+                                      .deletePlayer(player['id']);
+                                  if (deleted) {
+                                    setState(() {
+                                      snapshot.data!.removeAt(index);
+                                    });
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content:
+                                          Text('Player deleted successfully'),
+                                    ));
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text('Failed to delete player'),
+                                    ));
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -123,6 +160,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 },
               ),
             ),
+            SizedBox(height: 10),
             ElevatedButton(
               onPressed: () async {
                 var newPlayer = await Navigator.push(
@@ -138,6 +176,10 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 }
               },
               child: Text('Add Player'),
+              style: ElevatedButton.styleFrom(
+                minimumSize:
+                    Size.fromHeight(50), // Add this line to set a fixed height
+              ),
             ),
           ],
         ),

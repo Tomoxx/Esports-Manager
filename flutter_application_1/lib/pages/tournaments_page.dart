@@ -60,20 +60,36 @@ class _TournamentsScreenState extends State<TournamentsScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 var tournament = snapshot.data![index];
-                return ListTile(
-                  title: Text(tournament['name']),
-                  subtitle: Text(tournament['game']),
-                  trailing: Text(
-                      '${tournament['start_date']} - ${tournament['end_date']}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TournamentDetailsScreen(
-                                tournament: tournament,
-                              )),
-                    );
-                  },
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    elevation: 5,
+                    child: ListTile(
+                      title: Text(
+                        tournament['name'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(tournament['game']),
+                      trailing: Text(
+                        '${tournament['start_date']} - ${tournament['end_date']}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TournamentDetailsScreen(
+                              tournament: tournament,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             );

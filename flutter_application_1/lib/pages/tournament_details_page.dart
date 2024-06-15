@@ -79,102 +79,154 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('ID: ${widget.tournament['id']}'),
-          Text('Name: ${widget.tournament['name']}'),
-          Text('Game: ${widget.tournament['game']}'),
-          Text('Type: ${widget.tournament['type']}'),
-          Text('Start Date: ${widget.tournament['start_date']}'),
-          Text('End Date: ${widget.tournament['end_date']}'),
-          SizedBox(height: 20),
-          Text('Teams:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Expanded(
-            child: FutureBuilder<List<dynamic>>(
-              future: _teams,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No teams found.'));
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      var team = snapshot.data![index];
-                      return ListTile(
-                        title: Text("${team['name']} - ${team['placement']}"),
-                        subtitle: Text('Region: ${team['region']}'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TeamDetailsScreen(team: team),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ID: ${widget.tournament['id']}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text('Name: ${widget.tournament['name']}',
+                        style: TextStyle(fontSize: 16)),
+                    Text('Game: ${widget.tournament['game']}',
+                        style: TextStyle(fontSize: 16)),
+                    Text('Type: ${widget.tournament['type']}',
+                        style: TextStyle(fontSize: 16)),
+                    Text('Start Date: ${widget.tournament['start_date']}',
+                        style: TextStyle(fontSize: 16)),
+                    Text('End Date: ${widget.tournament['end_date']}',
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text('Teams:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Expanded(
+              child: FutureBuilder<List<dynamic>>(
+                future: _teams,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('No teams found.'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        var team = snapshot.data![index];
+                        String title = team['name'];
+                        String subtitle = 'Region: ${team['region']}';
+                        if (team['placement'] != null) {
+                          title += ' - ${team['placement']}';
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                          );
-                        },
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () async {
-                            bool deleted = await HttpService()
-                                .deleteTeamFromTournament(
-                                    team['tournament_team_id']);
-                            if (deleted) {
-                              setState(() {
-                                snapshot.data!.removeAt(index);
-                              });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('Team removed successfully'),
-                              ));
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text('Failed to remove team'),
-                              ));
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  );
+                            elevation: 5,
+                            child: ListTile(
+                              title: Text(title,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Text(subtitle),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TeamDetailsScreen(team: team),
+                                  ),
+                                );
+                              },
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  bool deleted = await HttpService()
+                                      .deleteTeamFromTournament(
+                                          team['tournament_team_id']);
+                                  if (deleted) {
+                                    setState(() {
+                                      snapshot.data!.removeAt(index);
+                                    });
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content:
+                                          Text('Team removed successfully'),
+                                    ));
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text('Failed to remove team'),
+                                    ));
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var newTeam = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddTeamPage(
+                        tournamentId: widget.tournament['id'],
+                        game: widget.tournament['game']),
+                  ),
+                );
+
+                if (newTeam != null) {
+                  _refreshTeams(); // Refresh the list of teams after adding a new team
                 }
               },
+              child: Text('Add Team'),
+              style: ElevatedButton.styleFrom(
+                minimumSize:
+                    Size.fromHeight(50), // Add this line to set a fixed height
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              var newTeam = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AddTeamPage(tournamentId: widget.tournament['id']),
-                ),
-              );
-
-              if (newTeam != null) {
-                _refreshTeams(); // Refresh the list of teams after adding a new team
-              }
-            },
-            child: Text('Add Team'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TournamentCalendarScreen(
-                      tournamentId: widget.tournament['id']),
-                ),
-              );
-            },
-            child: Text('View Matches'),
-          ),
-        ],
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TournamentCalendarScreen(
+                        tournamentId: widget.tournament['id']),
+                  ),
+                );
+              },
+              child: Text('View Matches'),
+              style: ElevatedButton.styleFrom(
+                minimumSize:
+                    Size.fromHeight(50), // Add this line to set a fixed height
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

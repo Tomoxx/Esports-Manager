@@ -73,7 +73,9 @@ class TournamentController extends Controller
      */
     public function update(TournamentRequest $request, Tournament $tournament)
     {
-        $tournament->name = $request->name;
+        $request =
+
+            $tournament->name = $request->name;
         $tournament->game = $request->game;
         $tournament->type = $request->type;
         $tournament->start_date = $request->start_date;

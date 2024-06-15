@@ -60,17 +60,30 @@ class _TeamsScreenState extends State<TeamsScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 var team = snapshot.data![index];
-                return ListTile(
-                  title: Text(team['name']),
-                  subtitle: Text('Game: ${team['game']}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TeamDetailsScreen(team: team),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    elevation: 5,
+                    child: ListTile(
+                      title: Text(
+                        team['name'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
+                      subtitle: Text('Game: ${team['game']}'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TeamDetailsScreen(team: team),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             );

@@ -94,7 +94,7 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
               ),
               TextFormField(
                 controller: _typeController,
-                decoration: InputDecoration(labelText: 'Type'),
+                decoration: InputDecoration(labelText: 'Type - Online/Offline'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the type';
