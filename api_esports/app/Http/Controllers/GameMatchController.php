@@ -16,6 +16,14 @@ class GameMatchController extends Controller
         return GameMatch::all();
     }
 
+    public function getMatches($tournament_id)
+    {
+        $matches = GameMatch::where('tournament_id', $tournament_id)
+            ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
+            ->get();
+        return response()->json($matches);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -44,9 +52,12 @@ class GameMatchController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(GameMatch $gameMatch)
+    public function show($gameMatch_id)
     {
-        return $gameMatch;
+        $gameMatch = GameMatch::where('id', $gameMatch_id)
+            ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
+            ->get();
+        return response()->json($gameMatch);
     }
 
     /**
@@ -60,17 +71,41 @@ class GameMatchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, GameMatch $gameMatch)
+    // public function update(Request $request, $gameMatch_id)
+    // {
+    //     $gameMatch = GameMatch::where('id', $gameMatch_id)
+    //         ->with(['homeTeam', 'awayTeam', 'venue']) // Assuming relationships are defined in Match model
+    //         ->get();;
+    //     $gameMatch->home_team_score = $request->home_team_score;
+    //     $gameMatch->away_team_score = $request->away_team_score;
+    //     $gameMatch->save();
+    //     return response()->json($gameMatch);
+    // }
+
+    public function update(Request $request, $id)
     {
-        $gameMatch->tournament_id = $request->tournament_id;
-        $gameMatch->home_team_id = $request->home_team_id;
-        $gameMatch->away_team_id = $request->away_team_id;
-        $gameMatch->venue_id = $request->venue_id;
-        $gameMatch->match_date = $request->match_date;
-        $gameMatch->home_team_score = $request->home_team_score;
-        $gameMatch->away_team_score = $request->away_team_score;
+        // Validate the request data
+        $validated = $request->validate([
+            'home_team_score' => 'required|integer',
+            'away_team_score' => 'required|integer',
+            'match_date' => 'required|date_format:Y-m-d H:i' // Assuming date format is 'Y-m-d H:i'
+        ]);
+
+        // Find the match by ID
+        $gameMatch = GameMatch::find($id);
+
+        // Check if the match exists
+        if (!$gameMatch) {
+            return response()->json(['message' => 'Match not found'], 404);
+        }
+
+        // Update the match scores and date
+        $gameMatch->home_team_score = $validated['home_team_score'];
+        $gameMatch->away_team_score = $validated['away_team_score'];
+        $gameMatch->match_date = $validated['match_date'];
         $gameMatch->save();
-        return $gameMatch;
+
+        return response()->json($gameMatch, 200);
     }
 
     /**

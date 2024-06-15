@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import intl package for date formatting
 import 'package:flutter_application_1/services/http_service.dart';
 
 class CreateTournamentScreen extends StatefulWidget {
@@ -14,6 +15,9 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
 
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -22,6 +26,38 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
     _startDateController.dispose();
     _endDateController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (picked != null && picked != _startDate) {
+      setState(() {
+        _startDate = picked;
+        _startDateController.text =
+            DateFormat('yyyy-MM-dd').format(picked); // Format date as string
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _endDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 10),
+    );
+    if (picked != null && picked != _endDate) {
+      setState(() {
+        _endDate = picked;
+        _endDateController.text =
+            DateFormat('yyyy-MM-dd').format(picked); // Format date as string
+      });
+    }
   }
 
   @override
@@ -69,6 +105,8 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
               TextFormField(
                 controller: _startDateController,
                 decoration: InputDecoration(labelText: 'Start Date'),
+                onTap: () => _selectStartDate(context),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the start date';
@@ -79,6 +117,8 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
               TextFormField(
                 controller: _endDateController,
                 decoration: InputDecoration(labelText: 'End Date'),
+                onTap: () => _selectEndDate(context),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the end date';

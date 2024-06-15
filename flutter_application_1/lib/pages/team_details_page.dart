@@ -95,7 +95,6 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                         var player = snapshot.data![index];
                         return ListTile(
                           title: Text(player['name']),
-                          subtitle: Text('ID: ${player['id']}'),
                           trailing: IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () async {

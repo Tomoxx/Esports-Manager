@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/teams_page.dart';
-import 'package:flutter_application_1/pages/calendario_partidos_page.dart';
 import 'package:flutter_application_1/pages/tournaments_page.dart';
 import 'package:flutter_application_1/widgets/card_item.dart';
 
@@ -57,30 +56,6 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => TeamsScreen()),
-                      );
-                    },
-                  ),
-                  CardItem(
-                    title: 'Calendario',
-                    imagePath: 'assets/images/calendario.jpg',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const CalendarioPartidosPage()),
-                      );
-                    },
-                  ),
-                  CardItem(
-                    title: 'Partidos',
-                    imagePath: 'assets/images/partido.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const CalendarioPartidosPage()),
                       );
                     },
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/add_team_page.dart';
 import 'package:flutter_application_1/pages/edit_tournament_page.dart';
 import 'package:flutter_application_1/pages/team_details_page.dart';
+import 'package:flutter_application_1/pages/tournament_calendar_page.dart';
 import 'package:flutter_application_1/services/http_service.dart';
 
 class TournamentDetailsScreen extends StatefulWidget {
@@ -160,6 +161,18 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
               }
             },
             child: Text('Add Team'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TournamentCalendarScreen(
+                      tournamentId: widget.tournament['id']),
+                ),
+              );
+            },
+            child: Text('View Matches'),
           ),
         ],
       ),
