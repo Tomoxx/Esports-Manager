@@ -24,6 +24,7 @@ class TeamRequest extends FormRequest
         return [
             'name' => ['required', 'min:2'],
             'game' => ['required', 'min:2'],
+            'region' => ['required', 'min:2'],
         ];
     }
 
@@ -34,6 +35,8 @@ class TeamRequest extends FormRequest
             'name.min' => 'The team name must be at least 2 characters.',
             'game.required' => 'The game field is required.',
             'game.min' => 'The game must be at least 2 characters.',
+            'region.required' => 'The region field is required.',
+            'region.min' => 'The region must be at least 2 characters.',
         ];
     }
 }

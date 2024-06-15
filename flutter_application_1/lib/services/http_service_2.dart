@@ -14,7 +14,7 @@ class HttpService2 {
     return [];
   }
 
-  Future<bool> addMatch(
+  Future<dynamic> addMatch(
     int tournamentId,
     int homeTeamId,
     int awayTeamId,
@@ -43,7 +43,11 @@ class HttpService2 {
       }),
     );
 
-    return response.statusCode == 201;
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to create match');
+    }
   }
 
   Future<bool> deleteMatch(int matchId) async {

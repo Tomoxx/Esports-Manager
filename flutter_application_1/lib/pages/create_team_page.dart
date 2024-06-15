@@ -20,6 +20,29 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
     super.dispose();
   }
 
+  Future<void> _createTeam() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        var newTeam = await HttpService().addTeam(
+          _nameController.text,
+          _gameController.text,
+          _regionController.text,
+        );
+        if (newTeam != null) {
+          Navigator.of(context).pop(newTeam);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Failed to create team'),
+          ));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to create team: $e'),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,22 +87,7 @@ class _CreateTeamScreenState extends State<CreateTeamScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    var newTeam = await HttpService().addTeam(
-                      _nameController.text,
-                      _gameController.text,
-                      _regionController.text,
-                    );
-                    if (newTeam != null) {
-                      Navigator.of(context).pop(newTeam);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to create tournament'),
-                      ));
-                    }
-                  }
-                },
+                onPressed: _createTeam,
                 child: Text('Create'),
               ),
             ],

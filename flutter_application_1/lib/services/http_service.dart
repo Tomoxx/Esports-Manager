@@ -42,7 +42,11 @@ class HttpService {
         'end_date': endDate,
       }),
     );
-    return json.decode(response.body);
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to create tournament');
+    }
   }
 
   Future<bool> deleteTournament(int tournamentId) async {
@@ -123,7 +127,11 @@ class HttpService {
         'region': region,
       }),
     );
-    return json.decode(response.body);
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to create team');
+    }
   }
 
   Future<LinkedHashMap<String, dynamic>> updateTeam(

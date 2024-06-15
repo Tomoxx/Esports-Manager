@@ -28,7 +28,7 @@ class PlayerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PlayerRequest $request)
     {
         $player = new Player();
         $player->name = $request->name;
@@ -56,7 +56,7 @@ class PlayerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Player $player)
+    public function update(PlayerRequest $request, Player $player)
     {
         $player->name = $request->name;
         $player->save();

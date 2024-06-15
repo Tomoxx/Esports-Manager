@@ -36,7 +36,7 @@ class GameMatchController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(GameMatchRequest $request)
     {
         $gameMatch = new GameMatch();
         $gameMatch->tournament_id = $request->tournament_id;
@@ -72,15 +72,8 @@ class GameMatchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(GameMatchRequest $request, $id)
     {
-        // Validate the request data
-        $validated = $request->validate([
-            'home_team_score' => 'required|integer',
-            'away_team_score' => 'required|integer',
-            'match_date' => 'required|date_format:Y-m-d H:i' // Assuming date format is 'Y-m-d H:i'
-        ]);
-
         // Find the match by ID
         $gameMatch = GameMatch::find($id);
 
@@ -90,9 +83,9 @@ class GameMatchController extends Controller
         }
 
         // Update the match scores and date
-        $gameMatch->home_team_score = $validated['home_team_score'];
-        $gameMatch->away_team_score = $validated['away_team_score'];
-        $gameMatch->match_date = $validated['match_date'];
+        $gameMatch->home_team_score = $request['home_team_score'];
+        $gameMatch->away_team_score = $request['away_team_score'];
+        $gameMatch->match_date = $request['match_date'];
         $gameMatch->save();
 
         return response()->json($gameMatch, 200);

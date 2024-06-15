@@ -15,6 +15,7 @@ class TournamentsSeeder extends Seeder
     {
         DB::table('tournaments')->insert([
             ['name' => 'RLCS 2024 - Major 2: London', 'type' => 'Online', 'game' => 'Rocket League', 'start_date' => '2024-06-20', 'end_date' => '2024-06-23'],
+            ['name' => 'VCT 2024', 'type' => 'Offline', 'game' => 'Valorant', 'start_date' => '2024-06-20', 'end_date' => '2024-06-27'],
         ]);
     }
 }

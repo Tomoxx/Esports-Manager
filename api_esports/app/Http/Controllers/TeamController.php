@@ -40,7 +40,7 @@ class TeamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TeamRequest $request)
     {
         $team = new Team();
         $team->name = $request->name;
@@ -71,7 +71,7 @@ class TeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Team $team)
+    public function update(TeamRequest $request, Team $team)
     {
         $team->name = $request->name;
         $team->game = $request->game;

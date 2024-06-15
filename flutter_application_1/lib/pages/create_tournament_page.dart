@@ -60,6 +60,31 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
     }
   }
 
+  Future<void> _createTournament() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        var newTournament = await HttpService().addTournament(
+          _nameController.text,
+          _gameController.text,
+          _typeController.text,
+          _startDateController.text,
+          _endDateController.text,
+        );
+        if (newTournament != null) {
+          Navigator.of(context).pop(newTournament);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Failed to create tournament'),
+          ));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to create tournament: $e'),
+        ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,24 +153,7 @@ class _CreateTournamentScreenState extends State<CreateTournamentScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    var newTournament = await HttpService().addTournament(
-                      _nameController.text,
-                      _gameController.text,
-                      _typeController.text,
-                      _startDateController.text,
-                      _endDateController.text,
-                    );
-                    if (newTournament != null) {
-                      Navigator.of(context).pop(newTournament);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to create tournament'),
-                      ));
-                    }
-                  }
-                },
+                onPressed: _createTournament,
                 child: Text('Create'),
               ),
             ],
