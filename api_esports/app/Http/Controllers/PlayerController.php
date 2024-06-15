@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Player;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\PlayerRequest;
 
 class PlayerController extends Controller
 {
@@ -27,9 +28,13 @@ class PlayerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PlayerRequest $request)
     {
-        //
+        $player = new Player();
+        $player->name = $request->name;
+        $player->team_id = $request->team_id;
+        $player->save();
+        return $player;
     }
 
     /**
@@ -37,7 +42,7 @@ class PlayerController extends Controller
      */
     public function show(Player $player)
     {
-        //
+        return $player;
     }
 
     /**
@@ -51,9 +56,11 @@ class PlayerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Player $player)
+    public function update(PlayerRequest $request, Player $player)
     {
-        //
+        $player->name = $request->name;
+        $player->save();
+        return $player;
     }
 
     /**
@@ -61,6 +68,6 @@ class PlayerController extends Controller
      */
     public function destroy(Player $player)
     {
-        //
+        return $player->delete();
     }
 }
